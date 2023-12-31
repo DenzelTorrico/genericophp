@@ -1,26 +1,27 @@
 <head>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/sidebar.css">
 </head>
+
 <?php
 
 require("../database/generictable.php");
 //require("../modals/insertdata.php");
-
-
-
 
 // Recupera la ruta desde el parámetro
 $ruta = isset($_GET['ruta']) ? $_GET['ruta'] : '';
 
 //INSERTAR
 
-if($_SERVER["REQUEST_METHOD"] == "POST"){
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $datosPost = [];
-    
-    foreach($_POST as $key => $values) {
+
+    foreach ($_POST as $key => $values) {
         $datosPost[$key] = htmlspecialchars($values);
     }
-    echo $genericTable->InsertIntoTable($ruta,$datosPost);
+    echo $genericTable->InsertIntoTable($ruta, $datosPost);
 }
 
 // Define los mensajes correspondientes a las rutas
@@ -30,68 +31,82 @@ $listclass = $genericTable->GetTableCreated();
 if (in_array($ruta, $listclass)) {
     // Muestra el mensaje para la ruta específica
 ?>
-    <table class="table container">
-        <h1>Tabla de <?= $ruta ?></h1>    
-    
 
-    <tr>
+<div class="content">
+        <div class="sidebar">
+
             <?php
-            foreach ($genericTable->GetColumnTable($ruta) as $columns) {
-                echo "<th>" . $columns["Field"] . "</th>";
-            }
+
+                require("./layouts/sidebar.php");
+            
             ?>
-            <th>Eliminar</th>
-            <th>Actualizar</th>
-        </tr>
-        <?php
-        foreach ($genericTable->GetDataTable($ruta) as $data) {
-            echo "<tr>";
-            foreach ($genericTable->GetColumnTable($ruta) as $columns) {
-                echo "<td>" . $data[$columns["Field"]] . "</td>";
-            }
-            echo "<td><a href=''>Eliminar</a></td>";
-            echo "<td><a href='/actualizar'>Actualizar</a></td>";
+        </div>
 
-            echo "</tr>";
-        }
-        ?>
-  
-    </table>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-            Agregar Data
-    </button>
+        <div class="body container">
+            <table class="table container">
+                <h1>Tabla de <?= $ruta ?></h1>
 
-    <!-- Button trigger modal -->
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Agregando..</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <form name="formulario" action="<?php echo $ruta ?>" method="post">
-      <div class="modal-body">
-        <?php
-           foreach ($genericTable->GetColumnTable($ruta) as $column) {
-            echo "<label class='form-label'>".$column["Field"]."</label>";
-            echo '<input required type="text" class="form-control" name="' . $column['Field'] . '" />';
-        }
-        
-        ?>
-  
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Guardar Datos</button>
-      </div>
-      </form>
-    </div>
-  </div>
+
+                <tr>
+                    <?php
+                    foreach ($genericTable->GetColumnTable($ruta) as $columns) {
+                        echo "<th>" . $columns["Field"] . "</th>";
+                    }
+                    ?>
+                    <th>Eliminar</th>
+                    <th>Actualizar</th>
+                </tr>
+                <?php
+                foreach ($genericTable->GetDataTable($ruta) as $data) {
+                    echo "<tr>";
+                    foreach ($genericTable->GetColumnTable($ruta) as $columns) {
+                        echo "<td>" . $data[$columns["Field"]] . "</td>";
+                    }
+                    echo "<td><button onclick='')\" class='btn btn-danger'>Eliminar</button></td>";
+                    echo "<td><a href='/actualizar'>Actualizar</a></td>";
+
+                    echo "</tr>";
+                }
+                ?>
+
+            </table>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                Agregar Data
+            </button>
+
+            <!-- Button trigger modal -->
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Agregando..</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form name="formulario" action="<?php echo $ruta ?>" method="post">
+                            <div class="modal-body">
+                                <?php
+                                foreach ($genericTable->GetColumnTable($ruta) as $column) {
+                                    echo "<label class='form-label'>" . $column["Field"] . "</label>";
+                                    echo '<input required type="text" class="form-control" name="' . $column['Field'] . '" />';
+                                }
+
+                                ?>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Guardar Datos</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 </div>
-
 <?php
 } else {
     // Muestra un mensaje de error si la ruta no se encuentra

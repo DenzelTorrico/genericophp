@@ -6,5 +6,7 @@
         <ul><a href="productos">productos</a></ul>
         <ul><a href="usuarios">Usuarios</a></ul>
         <ul><a href="comida">Comida</a></ul>
+        <ul><a href="tables">Tablas</a></ul>
+
     </div>
 </div>

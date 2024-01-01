@@ -1,18 +1,20 @@
 <head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="../css/index.css">
     <link rel="stylesheet" href="../css/sidebar.css">
 </head>
 
 <?php
 
+
 require("../database/generictable.php");
 //require("../modals/insertdata.php");
 
 // Recupera la ruta desde el parámetro
 $ruta = isset($_GET['ruta']) ? $_GET['ruta'] : '';
-
+echo "<script>
+alerta()
+</script>";
 //INSERTAR
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -27,6 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $datosPost[$key] = htmlspecialchars($values);
         }
         $genericTable->InsertIntoTable($ruta, $datosPost);
+       
     }
 }
 
@@ -48,8 +51,8 @@ if (in_array($ruta, $listclass)) {
             ?>
         </div>
 
-        <div class="body container">
-            <table class="table container">
+        <div class="body container mt-2">
+            <table class="table">
                 <h1>Tabla de <?= $ruta ?></h1>
 
 
@@ -105,8 +108,10 @@ foreach ($genericTable->GetDataTable($ruta) as $data) {
                             <div class="modal-body">
                                 <?php
                                 foreach ($genericTable->GetColumnTable($ruta) as $column) {
-                                    echo "<label class='form-label'>" . $column["Field"] . "</label>";
-                                    echo '<input required type="text" class="form-control" name="' . $column['Field'] . '" />';
+                                    if($column["Field"] != "id"){
+                                        echo "<label class='form-label'>" . $column["Field"] . "</label>";
+                                        echo '<input required type="text" class="form-control" name="' . $column['Field'] . '" />';
+                                    }
                                 }
 
                                 ?>
@@ -130,6 +135,7 @@ foreach ($genericTable->GetDataTable($ruta) as $data) {
 }
 
 ?>
+
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

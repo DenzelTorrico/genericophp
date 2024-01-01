@@ -2,6 +2,7 @@
 require("../model/productos.php");
 require("../model/users.php");
 require("../database/conexion.php");
+require("../model/tables.php");
 class GenericTable {
     private $table_created = array();
     private $connect;
@@ -77,6 +78,7 @@ class GenericTable {
 $genericTable = new GenericTable();
 $genericTable->CreateTableIfNotExist(new Productos);
 $genericTable->CreateTableIfNotExist(new Usuarios);
+$genericTable->CreateTableIfNotExist(new Tables);
 //$genericTable->CreateTableIfNotExist(new Comida())
 ?>
     

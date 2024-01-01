@@ -1,6 +1,6 @@
 .content{
     display: flex;
-    height: max-content;
+    height: 100vh;
 }
 .sidebar{
     width: 250px;

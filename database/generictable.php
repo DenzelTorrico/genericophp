@@ -61,7 +61,7 @@ class GenericTable {
     }
     public function DeleteToTable($tableName,$id){
         $command = "delete from $tableName where id = $id";
-        //$sql = $this->ExecuteCommand($command);
+        $sql = $this->ExecuteCommand($command);
         return $command;
     }
     function ExecuteCommand($command){

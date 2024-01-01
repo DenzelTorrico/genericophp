@@ -16,12 +16,18 @@ $ruta = isset($_GET['ruta']) ? $_GET['ruta'] : '';
 //INSERTAR
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $datosPost = [];
+    if(isset($_POST["eliminar"])){
+            $id = $_POST["delete_id"];
+           // echo $id;
+            $genericTable->DeleteToTable($ruta,$id);
+    }else{
+        $datosPost = [];
 
-    foreach ($_POST as $key => $values) {
-        $datosPost[$key] = htmlspecialchars($values);
+        foreach ($_POST as $key => $values) {
+            $datosPost[$key] = htmlspecialchars($values);
+        }
+        $genericTable->InsertIntoTable($ruta, $datosPost);
     }
-    echo $genericTable->InsertIntoTable($ruta, $datosPost);
 }
 
 // Define los mensajes correspondientes a las rutas
@@ -57,17 +63,27 @@ if (in_array($ruta, $listclass)) {
                     <th>Actualizar</th>
                 </tr>
                 <?php
-                foreach ($genericTable->GetDataTable($ruta) as $data) {
-                    echo "<tr>";
-                    foreach ($genericTable->GetColumnTable($ruta) as $columns) {
-                        echo "<td>" . $data[$columns["Field"]] . "</td>";
-                    }
-                    echo "<td><button onclick='')\" class='btn btn-danger'>Eliminar</button></td>";
-                    echo "<td><a href='/actualizar'>Actualizar</a></td>";
+foreach ($genericTable->GetDataTable($ruta) as $data) {
+    echo "<tr>";
+    foreach ($genericTable->GetColumnTable($ruta) as $columns) {
+        echo "<td>" . $data[$columns["Field"]] . "</td>";
+    }
 
-                    echo "</tr>";
-                }
-                ?>
+    // Agregar botón de eliminación
+    echo "<td>";
+    echo "<form method='post' action='$ruta'>";
+    echo "<input type='hidden' name='delete_id' value='" . $data['id'] . "'>"; // Ajusta según el nombre de tu clave primaria
+    echo "<button type='submit' name='eliminar' class='btn btn-danger'>Eliminar</button>";
+    echo "</form>";
+    echo "</td>";
+
+    // Agregar enlace de actualización
+    echo "<td><a href='/actualizar?id=" . $data['id'] . "'>Actualizar</a></td>";
+
+    echo "</tr>";
+}
+?>
+
 
             </table>
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">

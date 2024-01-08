@@ -1,3 +1,8 @@
+<?php
+
+?>
+
+
 <div class="sidebar-body">
     <div>
         <img style="width: 150px;" src="../images/logo.png" alt="" srcset="">
